@@ -11,8 +11,9 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val appModule = module {
-    single { HttpClientFactory.create(CIO.create()) }
+    single { HttpClientFactory.create(CIO.create()) }//CIO -> Coroutine-based IO
     singleOf(::RemoteCoinDataSource).bind<CoinDataSource>()
 
     viewModelOf(::CoinListViewModel)
 }
+

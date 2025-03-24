@@ -4,7 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="CryptoTracker.app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-03-17T00:36:31.191906700Z">
+        <DropdownSelection timestamp="2025-03-23T01:27:20.685392300Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\FORMAT\.android\avd\Pixel_6.avd" />
