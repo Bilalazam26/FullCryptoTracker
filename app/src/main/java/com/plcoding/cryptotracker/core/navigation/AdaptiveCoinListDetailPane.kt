@@ -27,7 +27,7 @@ fun AdaptiveCoinListDetailPane(
     modifier: Modifier = Modifier,
     coinsListVM: CoinListViewModel = koinViewModel()
 ) {
-    val state by coinsListVM.state.collectAsStateWithLifecycle()
+    val selectedCoinUiState by coinsListVM.selectedCoinUiState.collectAsStateWithLifecycle()
     val coins = coinsListVM.coinPagingFlow.collectAsLazyPagingItems()
     val context = LocalContext.current
     ObserveAsEvent(events = coinsListVM.events) { event ->
@@ -48,7 +48,6 @@ fun AdaptiveCoinListDetailPane(
         listPane = {
             AnimatedPane {
                 CoinListScreen(
-                    state = state,
                     onAction = { action ->
                         coinsListVM.onAction(action)
                         if (action is CoinListAction.OnCoinListItemClick) {
@@ -64,7 +63,7 @@ fun AdaptiveCoinListDetailPane(
         detailPane = {
             AnimatedPane {
                 CoinDetailsScreen(
-                    state = state
+                    state = selectedCoinUiState
                 )
             }
         },

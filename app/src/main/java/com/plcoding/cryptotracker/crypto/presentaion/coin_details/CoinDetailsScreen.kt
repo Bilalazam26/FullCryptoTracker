@@ -43,8 +43,8 @@ import com.plcoding.cryptotracker.crypto.presentaion.coin_details.chart.ChartSty
 import com.plcoding.cryptotracker.crypto.presentaion.coin_details.chart.DataPoint
 import com.plcoding.cryptotracker.crypto.presentaion.coin_details.chart.LineChart
 import com.plcoding.cryptotracker.crypto.presentaion.coin_details.components.InfoCard
-import com.plcoding.cryptotracker.crypto.presentaion.coin_list.CoinListState
 import com.plcoding.cryptotracker.crypto.presentaion.coin_list.components.previewCoin
+import com.plcoding.cryptotracker.crypto.presentaion.models.CoinUi
 import com.plcoding.cryptotracker.crypto.presentaion.models.toDisplayableNumber
 import com.plcoding.cryptotracker.ui.theme.CryptoTrackerTheme
 import com.plcoding.cryptotracker.ui.theme.greenBackground
@@ -52,7 +52,7 @@ import com.plcoding.cryptotracker.ui.theme.greenBackground
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CoinDetailsScreen(
-    state: CoinListState,
+    state: CoinUi?,
     modifier: Modifier = Modifier
 ) {
     val contentColor = if (isSystemInDarkTheme()) {
@@ -62,15 +62,8 @@ fun CoinDetailsScreen(
     }
 
 
-    if (state.isLoading) {
-        Box(
-            modifier = modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
-        }
-    } else if(state.selectedCoinUi != null){
-        val coin = state.selectedCoinUi
+    if(state != null){
+        val coin = state
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -189,7 +182,9 @@ fun CoinDetailsScreen(
         }
     }
 
+
 }
+/*
 
 @PreviewLightDark
 @PreviewDynamicColors
@@ -203,4 +198,4 @@ private fun PreviewCoinDetailsScreen() {
             modifier = Modifier.background(MaterialTheme.colorScheme.background)
         )
     }
-}
+}*/
