@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.plcoding.cryptotracker.core.presentaion.util.ObserveAsEvent
 import com.plcoding.cryptotracker.core.presentaion.util.toString
 import com.plcoding.cryptotracker.crypto.presentaion.coin_details.CoinDetailsScreen
@@ -27,6 +28,7 @@ fun AdaptiveCoinListDetailPane(
     coinsListVM: CoinListViewModel = koinViewModel()
 ) {
     val state by coinsListVM.state.collectAsStateWithLifecycle()
+    val coins = coinsListVM.coinPagingFlow.collectAsLazyPagingItems()
     val context = LocalContext.current
     ObserveAsEvent(events = coinsListVM.events) { event ->
         when(event) {
@@ -54,7 +56,8 @@ fun AdaptiveCoinListDetailPane(
                                 pane = ListDetailPaneScaffoldRole.Detail
                             )
                         }
-                    }
+                    },
+                    coins = coins
                 )
             }
         },

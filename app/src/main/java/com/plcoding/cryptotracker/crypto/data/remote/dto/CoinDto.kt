@@ -1,4 +1,4 @@
-package com.plcoding.cryptotracker.crypto.data.dto
+package com.plcoding.cryptotracker.crypto.data.remote.dto
 
 import kotlinx.serialization.Serializable
 
@@ -10,5 +10,5 @@ data class CoinDto(
     val symbol: String,
     val marketCapUsd: Double,
     val priceUsd: Double,
-    val changePercent24Hr: Double
+    val changePercent24Hr: Double? = 0.0
 )

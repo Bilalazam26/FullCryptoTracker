@@ -6,7 +6,10 @@ import java.time.ZonedDateTime
 
 interface CoinDataSource {
 
-    suspend fun getCoins(): Result<List<Coin>, NetworkError>
+    suspend fun getCoins(
+        page: Int,
+        pageSize: Int
+    ): Result<List<Coin>, NetworkError>
     suspend fun getHistory(
         coinId: String,
         start: ZonedDateTime,

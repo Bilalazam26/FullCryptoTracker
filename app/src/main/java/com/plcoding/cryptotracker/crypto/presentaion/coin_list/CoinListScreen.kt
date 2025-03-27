@@ -22,11 +22,18 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import com.plcoding.cryptotracker.crypto.presentaion.coin_list.components.CoinListItem
 import com.plcoding.cryptotracker.crypto.presentaion.coin_list.components.previewCoin
 import com.plcoding.cryptotracker.ui.theme.CryptoTrackerTheme
 import kotlinx.coroutines.flow.Flow
 import com.plcoding.cryptotracker.core.presentaion.util.toString
+import com.plcoding.cryptotracker.crypto.data.local.entities.CoinEntity
+import com.plcoding.cryptotracker.crypto.data.mappers.toCoin
+import com.plcoding.cryptotracker.crypto.domain.Coin
+import com.plcoding.cryptotracker.crypto.presentaion.models.toCoinUi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.withContext
@@ -35,6 +42,7 @@ import kotlinx.coroutines.withContext
 fun CoinListScreen(
     state: CoinListState,
     onAction: (CoinListAction) -> Unit,
+    coins: LazyPagingItems<CoinEntity>,
     modifier: Modifier = Modifier
 ) {
     if (state.isLoading) {
@@ -49,19 +57,28 @@ fun CoinListScreen(
             modifier = modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(state.coins) { coinUi ->
-                CoinListItem(
-                    coinUi = coinUi,
-                    onClick = {
-                        onAction(CoinListAction.OnCoinListItemClick(coinUi))
-                    },
-                    modifier = Modifier.fillMaxSize()
-                )
-                HorizontalDivider()
+            items(
+                count = coins.itemCount, // Total items count
+                key = coins.itemKey { it.id }, // Unique key for each item
+                contentType = coins.itemContentType() // Optimized content type handling
+            ) { index ->
+                coins[index]?.let { coinEntity ->
+                    val coinUi = coinEntity.toCoin().toCoinUi()
+                    CoinListItem(
+                        coinUi = coinUi,
+                        onClick = {
+                            onAction(CoinListAction.OnCoinListItemClick(coinUi))
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    HorizontalDivider()
+                }
             }
+
         }
     }
 }
+/*
 
 @PreviewLightDark
 @PreviewDynamicColors
@@ -77,4 +94,4 @@ private fun PreviewCoinListScreen() {
             modifier = Modifier.background(MaterialTheme.colorScheme.background)
         )
     }
-}
+}*/

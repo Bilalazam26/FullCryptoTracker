@@ -1,4 +1,4 @@
-package com.plcoding.cryptotracker.crypto.data.dto
+package com.plcoding.cryptotracker.crypto.data.remote.dto
 
 import kotlinx.serialization.Serializable
 

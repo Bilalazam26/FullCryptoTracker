@@ -1,7 +1,8 @@
 package com.plcoding.cryptotracker.crypto.data.mappers
 
-import com.plcoding.cryptotracker.crypto.data.dto.CoinDto
-import com.plcoding.cryptotracker.crypto.data.dto.CoinPriceDto
+import com.plcoding.cryptotracker.crypto.data.local.entities.CoinEntity
+import com.plcoding.cryptotracker.crypto.data.remote.dto.CoinDto
+import com.plcoding.cryptotracker.crypto.data.remote.dto.CoinPriceDto
 import com.plcoding.cryptotracker.crypto.domain.Coin
 import com.plcoding.cryptotracker.crypto.domain.CoinPrice
 import java.time.Instant
@@ -15,7 +16,7 @@ fun CoinDto.toCoin(): Coin {
         symbol = this.symbol,
         marketCapUsd = this.marketCapUsd,
         priceUsd = this.priceUsd,
-        changePercent24Hr = this.changePercent24Hr
+        changePercent24Hr = this.changePercent24Hr ?: 0.0
     )
 }
 
@@ -25,5 +26,17 @@ fun CoinPriceDto.toCoinPrice(): CoinPrice {
         dateTime = Instant
             .ofEpochMilli(time)
             .atZone(ZoneId.of("UTC"))
+    )
+}
+
+fun CoinEntity.toCoin(): Coin {
+    return Coin(
+        id = this.id,
+        rank = this.rank,
+        name = this.name,
+        symbol = this.symbol,
+        marketCapUsd = this.marketCapUsd,
+        priceUsd = this.priceUsd,
+        changePercent24Hr = changePercent24Hr
     )
 }

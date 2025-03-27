@@ -1,14 +1,14 @@
-package com.plcoding.cryptotracker.crypto.data
+package com.plcoding.cryptotracker.crypto.data.remote
 
 import com.plcoding.cryptotracker.core.data.networking.constructUrl
 import com.plcoding.cryptotracker.core.data.networking.safeCall
 import com.plcoding.cryptotracker.core.domain.util.NetworkError
 import com.plcoding.cryptotracker.core.domain.util.Result
 import com.plcoding.cryptotracker.core.domain.util.map
-import com.plcoding.cryptotracker.crypto.data.dto.CoinHistoryDto
-import com.plcoding.cryptotracker.crypto.data.dto.CoinsResponseDto
 import com.plcoding.cryptotracker.crypto.data.mappers.toCoin
 import com.plcoding.cryptotracker.crypto.data.mappers.toCoinPrice
+import com.plcoding.cryptotracker.crypto.data.remote.dto.CoinHistoryDto
+import com.plcoding.cryptotracker.crypto.data.remote.dto.CoinsResponseDto
 import com.plcoding.cryptotracker.crypto.domain.Coin
 import com.plcoding.cryptotracker.crypto.domain.CoinDataSource
 import com.plcoding.cryptotracker.crypto.domain.CoinPrice
@@ -21,11 +21,18 @@ import java.time.ZonedDateTime
 class RemoteCoinDataSource(
     private val httpClient: HttpClient
 ): CoinDataSource {
-    override suspend fun getCoins(): Result<List<Coin>, NetworkError> {
+    override suspend fun getCoins(
+        page: Int,
+        pageSize: Int
+    ): Result<List<Coin>, NetworkError> {
+        val offset = (page - 1) * pageSize
         return safeCall<CoinsResponseDto> {
             httpClient.get(
                 urlString = constructUrl("/assets")
-            )
+            ) {
+                parameter("limit", pageSize)
+                parameter("offset", offset)
+            }
         }.map { response ->
             response.data.map { it.toCoin() }
         }
@@ -47,7 +54,7 @@ class RemoteCoinDataSource(
             .toEpochMilli()
 
         return safeCall<CoinHistoryDto> {
-            httpClient.get (
+            httpClient.get(
                 urlString = constructUrl("/assets/$coinId/history")
             ) {
                 parameter("interval", "h6")
