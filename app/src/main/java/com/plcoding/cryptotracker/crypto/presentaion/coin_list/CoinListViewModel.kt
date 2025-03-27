@@ -25,7 +25,7 @@ import java.time.format.DateTimeFormatter
 class CoinListViewModel(
     private val repository: CoinRepository
 ): ViewModel() {
-    val coinPagingFlow = repository.getCoinsPager()
+    var coinPagingFlow = repository.getCoinsPager()
         .flow
         .map { pagingData ->
             pagingData.map {
@@ -46,18 +46,9 @@ class CoinListViewModel(
             is CoinListAction.OnCoinListItemClick -> {
                 selectCoin(action.coinUi)
             }
-            CoinListAction.OnRefresh -> {
-                refreshCoins()
-
-            }
         }
     }
 
-    private fun refreshCoins() {
-        viewModelScope.launch {
-
-        }
-    }
 
     private fun selectCoin(coinUi: CoinUi) {
         _selectedCoinUiState.update {

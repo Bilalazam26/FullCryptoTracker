@@ -12,25 +12,16 @@ import com.plcoding.cryptotracker.crypto.data.local.entities.CoinEntity
 import com.plcoding.cryptotracker.crypto.data.paging.CoinsRemoteMediator
 import com.plcoding.cryptotracker.crypto.data.remote.RemoteCoinDataSource
 import com.plcoding.cryptotracker.crypto.domain.CoinPrice
-import kotlinx.coroutines.flow.Flow
 import java.time.ZonedDateTime
 
 class CoinRepository(
     private val remoteCoinDataSource: RemoteCoinDataSource,
-    private val coinDatabase: CoinDatabase
+    private val pager: Pager<Int, CoinEntity>
 ) {
-    private val coinsDao = coinDatabase.coinsDao()
 
-    @OptIn(ExperimentalPagingApi::class)
+
     fun getCoinsPager(): Pager<Int, CoinEntity> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 10,
-                enablePlaceholders = false
-            ),
-            remoteMediator = CoinsRemoteMediator(remoteCoinDataSource, coinDatabase),
-            pagingSourceFactory = { coinsDao.pagingSource() }
-        )
+        return pager
     }
 
     suspend fun getCoinHistory(
